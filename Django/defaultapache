@@ -1,0 +1,45 @@
+<VirtualHost *:80>
+        ServerAdmin webmaster@localhost
+        ServerName docker-python.com
+        ServerAlias www.docker-python.com
+
+        WSGIDaemonProcess myproyect python-path=/var/django/src:/var/django/lib/python3.4/site-packages
+        WSGIProcessGroup myproyect
+        WSGIScriptAlias / /var/django/src/myproyect/wsgi.py
+
+        Alias /media/ /var/django/src/myproyect/media/
+        Alias /static/ /var/django/src/myproyect/static/
+
+        <Directory /var/django/src/myproyect/static>
+        Require all granted
+        </Directory>
+
+        <Directory /var/django/src/myproyect/media>
+        Require all granted
+        </Directory>
+
+
+        DocumentRoot /var/django/src
+        <Directory />
+                Options FollowSymLinks
+                AllowOverride All
+        </Directory>
+        <Directory /var/django/src>
+                Options Indexes FollowSymLinks MultiViews
+                AllowOverride All
+                Order allow,deny
+                allow from all
+                <Files wsgi.py>
+                Require all granted
+                </Files>
+        </Directory>
+
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+
+        # Possible values include: debug, info, notice, warn, error, crit,
+        # alert, emerg.
+        LogLevel warn
+
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
